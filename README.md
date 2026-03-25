@@ -1,36 +1,106 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# FlowTrack — Financial Management App
 
-## Getting Started
+A clean, minimal financial management web app built with Next.js, Supabase, Tailwind CSS, and Recharts.
 
-First, run the development server:
+## Features
+
+- **Authentication** — Email + password via Supabase Auth
+- **Wallets** — Create multiple accounts (Mobile Money, Bank, Cash) with auto-calculated balances
+- **Categories** — Custom categories for organizing transactions
+- **Transactions** — Income, Expense, and Transfer support with proper balance logic
+- **Dashboard** — Summary cards, expense charts, and recent transactions
+- **Mobile-friendly** — Responsive sidebar + floating action button
+
+## Tech Stack
+
+- **Frontend:** Next.js 16 (App Router, React 19, TypeScript)
+- **Backend:** Supabase (PostgreSQL + Auth + RLS)
+- **Styling:** Tailwind CSS v4
+- **Charts:** Recharts
+- **Icons:** Lucide React
+
+## Setup Instructions
+
+### 1. Clone and install
+
+```bash
+cd flowtrack
+npm install
+```
+
+### 2. Create a Supabase project
+
+1. Go to [supabase.com](https://supabase.com) and create a new project
+2. Copy your **Project URL** and **Anon Key** from Settings → API
+
+### 3. Configure environment variables
+
+Create a `.env.local` file in the project root:
+
+```
+NEXT_PUBLIC_SUPABASE_URL=https://your-project.supabase.co
+NEXT_PUBLIC_SUPABASE_ANON_KEY=your-anon-key
+```
+
+### 4. Run the database schema
+
+1. Open the **SQL Editor** in your Supabase dashboard
+2. Paste and run the contents of `supabase-schema.sql`
+
+This creates:
+- `wallets`, `categories`, `transactions` tables
+- Row Level Security policies (users only see their own data)
+- `wallet_balances` view (auto-calculates balances from transactions)
+
+### 5. Start the dev server
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000) — you'll be redirected to the login page.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### 6. Register and start using
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+1. Create an account at `/register`
+2. Create wallets at `/wallets`
+3. Create categories at `/categories`
+4. Add transactions at `/transactions`
+5. View your dashboard at `/dashboard`
 
-## Learn More
+## Project Structure
 
-To learn more about Next.js, take a look at the following resources:
+```
+src/
+├── app/
+│   ├── (app)/              # Authenticated layout group
+│   │   ├── layout.tsx      # Sidebar + main content layout
+│   │   ├── dashboard/      # Dashboard with stats & charts
+│   │   ├── transactions/   # Transaction list + add modal
+│   │   ├── wallets/        # Wallet list + create form
+│   │   └── categories/     # Category list + create form
+│   ├── login/              # Login page
+│   ├── register/           # Registration page
+│   ├── layout.tsx          # Root layout
+│   ├── page.tsx            # Redirects to /dashboard
+│   └── globals.css
+├── components/
+│   └── Sidebar.tsx         # Navigation sidebar (responsive)
+├── lib/
+│   ├── supabase/
+│   │   ├── client.ts       # Browser Supabase client
+│   │   ├── server.ts       # Server Supabase client
+│   │   └── middleware.ts   # Auth session refresh
+│   └── types.ts            # TypeScript interfaces
+├── middleware.ts            # Next.js middleware (auth guard)
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Transaction Logic
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+| Type     | Effect                                          |
+|----------|--------------------------------------------------|
+| Income   | Adds amount to selected wallet                   |
+| Expense  | Subtracts amount from selected wallet             |
+| Transfer | Subtracts from source wallet, adds to destination |
 
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Wallet balances are **always derived from transactions** via the `wallet_balances` database view — never manually edited.
