@@ -1,6 +1,7 @@
 'use client'
 
 import Link from 'next/link'
+import Image from 'next/image'
 import { usePathname, useRouter } from 'next/navigation'
 import { createClient } from '@/lib/supabase/client'
 import {
@@ -37,7 +38,7 @@ export default function Sidebar() {
     <>
       {/* Mobile header */}
       <div className="lg:hidden fixed top-0 left-0 right-0 h-14 bg-white border-b border-gray-200 flex items-center justify-between px-4 z-40">
-        <span className="font-bold text-lg text-emerald-700">FlowTrack</span>
+        <Image src="/flowtrack.png" alt="FlowTrack" width={100} height={100} className="object-contain" />
         <button onClick={() => setOpen(!open)} className="p-2 rounded-lg hover:bg-gray-100">
           {open ? <X size={20} /> : <Menu size={20} />}
         </button>
@@ -57,8 +58,8 @@ export default function Sidebar() {
           open ? 'translate-x-0' : '-translate-x-full'
         } lg:translate-x-0`}
       >
-        <div className="h-14 flex items-center px-6 border-b border-gray-200">
-          <span className="font-bold text-lg text-emerald-700">FlowTrack</span>
+        <div className="h-14 flex items-center justify-center px-6 border-b border-gray-200">
+          <Image src="/flowtrack.png" alt="FlowTrack" width={150} height={150} className="object-contain" />
         </div>
 
         <nav className="flex-1 py-4 px-3 space-y-1">

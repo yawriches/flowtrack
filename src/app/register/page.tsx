@@ -4,6 +4,7 @@ import { useState } from 'react'
 import { createClient } from '@/lib/supabase/client'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
+import Image from 'next/image'
 import { UserPlus } from 'lucide-react'
 
 export default function RegisterPage() {
@@ -46,11 +47,13 @@ export default function RegisterPage() {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50 px-4">
-      <div className="w-full max-w-md">
+    <div className="min-h-screen flex items-center justify-center bg-gray-50 px-4 py-4">
+      <div className="w-full max-w-lg">
         <div className="text-center mb-8">
-          <h1 className="text-3xl font-bold text-gray-900">FlowTrack</h1>
-          <p className="text-gray-500 mt-2">Create your account</p>
+          <div className="flex items-center justify-center mb-4">
+            <Image src="/flowtrack.png" alt="FlowTrack" width={200} height={200} className="object-contain" />
+          </div>
+          <p className="text-gray-500">Create your account</p>
         </div>
 
         <form

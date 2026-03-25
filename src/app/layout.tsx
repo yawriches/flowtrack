@@ -17,6 +17,9 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   title: "FlowTrack - Financial Management",
   description: "Simple financial management app to track income, expenses, and transfers",
+  icons: {
+    icon: '/flowtrack.svg',
+  },
 };
 
 export default function RootLayout({
